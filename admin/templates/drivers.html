@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Drivers</title>
+</head>
+<body>
+    <h1>Drivers</h1>
+
+    <h3>Add New Driver</h3>
+    <form method="POST" action="/drivers/add">
+        <input type="text" name="name" placeholder="Driver Name" required>
+        <input type="text" name="phone" placeholder="Phone Number" required>
+        <button type="submit">Add Driver</button>
+    </form>
+
+    <h3>All Drivers</h3>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Created</th>
+        </tr>
+        {% for d in drivers %}
+        <tr>
+            <td>{{ d.id }}</td>
+            <td>{{ d.name }}</td>
+            <td>{{ d.phone }}</td>
+            <td>{{ d.status }}</td>
+            <td>{{ d.created_at }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>
