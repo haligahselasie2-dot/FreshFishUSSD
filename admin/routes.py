@@ -26,8 +26,8 @@ def index():
 #    ADMIN CREDENTIALS
 # ============================================
 ADMIN_USER = {
-    "username": "admin",
-    "password": generate_password_hash("password123")  # hashed password
+    "username": "DICKSON",
+    "password": generate_password_hash("26012011")  # hashed password
 }
 
 #  ============================================
