@@ -16,7 +16,7 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix="/admin")
 
     # Set session timeout (e.g., 30 minutes)
-    app.permanent_session_lifetime = timedelta(minutes=1)
+    app.permanent_session_lifetime = timedelta(minutes=30)
 
    # root route
     @app.route("/")
