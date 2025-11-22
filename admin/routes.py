@@ -41,7 +41,7 @@ def login():
 # check credentials
 #===========================
         if username == ADMIN_USER["username"] and check_password_hash(ADMIN_USER["password"], password):
-            session.permanent = False # this session will last until browser is closed
+            session.permanent = True # this session will last until browser is closed
             session["admin_logged_in"] = True
             return redirect(url_for("admin_bp.index"))
         else:

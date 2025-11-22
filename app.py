@@ -3,6 +3,7 @@ from config import Config
 from models import db
 from ussd.router import ussd_bp
 from admin.routes import admin_bp
+from datetime import timedelta
 
 def create_app():
     app = Flask(__name__)
@@ -13,6 +14,9 @@ def create_app():
     # register blueprints
     app.register_blueprint(ussd_bp, url_prefix="/ussd_api")
     app.register_blueprint(admin_bp, url_prefix="/admin")
+
+    # Set session timeout (e.g., 30 minutes)
+    app.permanent_session_lifetime = timedelta(minutes=1)
 
    # root route
     @app.route("/")
