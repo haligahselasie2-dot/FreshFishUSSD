@@ -18,12 +18,12 @@ def admin_home():
         return redirect(url_for("admin_bp.login"))
 
     return redirect(url_for("admin_bp.dashboard"))
-
+    
 # ============================================
 #   ADMIN DASHBOARD (Customers + Orders)
 # ============================================
 @admin_bp.route("/")
-def dasboard():
+def index():
     if not session.get("admin_logged_in"):
      return redirect(url_for("admin_bp.login"))
 
