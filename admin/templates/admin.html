@@ -1,70 +1,121 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title>FreshFish Admin</title></head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FreshFish Admin</title>
+    <link rel="stylesheet" href="{{ url_for('admin_bp.static', filename='css/dashboard.css') }}">
+</head>
 <body>
-<h1>Admin Dashboard</h1>
-<h2>Customers</h2>
-<table border=1>
-<tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Phone</th>
-    <th>Primary loc</th>
-    <th>Credit</th>
-</tr>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>FreshFish Admin</h2>
+            <ul>
+                <li><a href="{{ url_for('admin_bp.index') }}">Dashboard</a></li>
+                <li><a href="{{ url_for('admin_bp.drivers') }}">Drivers</a></li>
+                <li><a href="{{ url_for('admin_bp.logout') }}">Logout</a></li>
+            </ul>
+        </div>
 
-{% for c in customers %}
-<tr>
-    <td>{{c.id}}</td>
-    <td>{{c.name}}</td>
-    <td>{{c.phone}}</td>
-    <td>{{c.primary_location}}</td>
-    <td>{{c.credit_score}}</td>
-</tr>
+        <!-- Main content -->
+        <div class="main-content">
+            <header>
+                <h1>Welcome, Admin!</h1>
+            </header>
 
-{% endfor %}
-</table>
+            <!-- Cards for counts -->
+            <section class="cards">
+                <div class="card">
+                    <h3>Customers</h3>
+                    <p>{{ customers|length }}</p>
+                </div>
+                <div class="card">
+                    <h3>Orders</h3>
+                    <p>{{ orders|length }}</p>
+                </div>
+                <div class="card">
+                    <h3>Drivers</h3>
+                    <p>{{ drivers|length }}</p>
+                </div>
+            </section>
 
-<h2>Orders</h2>
-<table border=1>
-<tr>
-    <th>ID</th>
-    <th>Cust</th>
-    <th>Fish</th>
-    <th>Qty</th>
-    <th>Price</th>
-    <th>Status</th>
-    <th>Driver</th>
-    <th>QR</th>
-</tr>
+            <!-- Customers Table -->
+            <section class="tables">
+                <h2>Customers</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Primary loc</th>
+                            <th>Credit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in customers %}
+                        <tr>
+                            <td>{{c.id}}</td>
+                            <td>{{c.name}}</td>
+                            <td>{{c.phone}}</td>
+                            <td>{{c.primary_location}}</td>
+                            <td>{{c.credit_score}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
 
-{% for o in orders %}
-<tr>
-    <td>{{o.id}}</td>
-    <td>{{o.customer_id}}</td>
-    <td>{{o.fish_type}}</td>
-    <td>{{o.quantity}}</td>
-    <td>{{o.price}}</td>
-    <td>{{o.status}}</td>
-    <td>{{o.driver}}</td>
+            <!-- Orders Table -->
+            <section class="tables">
+                <h2>Orders</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cust</th>
+                            <th>Fish</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Driver</th>
+                            <th>QR</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for o in orders %}
+                        <tr>
+                            <td>{{o.id}}</td>
+                            <td>{{o.customer_id}}</td>
+                            <td>{{o.fish_type}}</td>
+                            <td>{{o.quantity}}</td>
+                            <td>{{o.price}}</td>
+                            <td>{{o.status}}</td>
+                            <td>{{o.driver}}</td>
+                            <td>{% if o.qr_path %}<img src="/static/{{o.qr_path}}" width="80">{% endif %}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('admin_bp.assign_driver', order_id=o.id) }}">
+                                    <select name="driver_id">
+                                        {% for d in drivers %}
+                                            {% if d.status == "Available" %}
+                                                <option value="{{ d.id }}">{{ d.name }} ({{ d.phone }})</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <button type="submit">Assign</button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
 
-    <td>{% if o.qr_path %}<img src="/static/{{o.qr_path}}" width="80">{% endif %}</td>
-    <td>
-        <form method="POST" action="/assign_driver/{{ o.id }}">
-            <select name="driver_id">
-                {% for d in drivers %}
-                   {% if d.status == "Available" %}
-                     <option value="{{ d.id }}">{{ d.name }} ({{ d.phone }})</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-            <button type="submit">Assign</button>
-        </form>
-    </td>
+        </div>
+    </div>
 
-
-</tr>
-{% endfor %}
-</table>
+    <script src="{{ url_for('admin_bp.static', filename='js/dashboard.js') }}"></script>
 </body>
 </html>
