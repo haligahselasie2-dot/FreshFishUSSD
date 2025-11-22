@@ -17,7 +17,7 @@ def admin_home():
     if not session.get("admin_logged_in"):
         return redirect(url_for("admin_bp.login"))
 
-    return redirect(url_for("admin_bp.dashboard"))
+    return redirect(url_for("admin_bp.index"))
 
 # ============================================
 #   ADMIN DASHBOARD (Customers + Orders)
