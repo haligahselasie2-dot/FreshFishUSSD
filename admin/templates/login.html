@@ -9,6 +9,9 @@
         <input type="text" name="username" placeholder="Username" required><br>
         <input type="password" name="password" placeholder="Password" required><br>
         <button type="submit">Login</button>
+        <input type="password" id="password" name="password" required>
+        <button type="button" onclick="togglePassword()">Show</button>
+
     </form>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -17,5 +20,20 @@
         {% endfor %}
       {% endif %}
     {% endwith %}
+    <script>
+function togglePassword() {
+    const passwordField = document.getElementById("password");
+    const btn = event.target;
+
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+        btn.textContent = "Hide";
+    } else {
+        passwordField.type = "password";
+        btn.textContent = "Show";
+    }
+}
+</script>
+
 </body>
 </html>
