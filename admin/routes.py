@@ -3,6 +3,9 @@ from models import db
 from models.customer import Customer
 from models.order import Order
 from models.driver import Driver   # ✅ IMPORTANT: Import Driver model
+from flask import session
+from werkzeug.security import check_password_hash, generate_password_hash
+
 
 admin_bp = Blueprint('admin_bp', __name__, template_folder='templates')
 
@@ -12,10 +15,45 @@ admin_bp = Blueprint('admin_bp', __name__, template_folder='templates')
 # ============================================
 @admin_bp.route("/")
 def index():
+    if not session.get("admin_logged_in"):
+     return redirect(url_for("admin_bp.login"))
+
     customers = Customer.query.order_by(Customer.id.desc()).all()
     orders = Order.query.order_by(Order.created_at.desc()).all()
     drivers = Driver.query.order_by(Driver.id.desc()).all()  # ✅ pass drivers list
     return render_template("admin.html", customers=customers, orders=orders, drivers=drivers)
+
+# Dummy admin credentials
+ADMIN_USER = {
+    "username": "admin",
+    "password": generate_password_hash("password123")  # hashed password
+}
+
+#  ============================================
+#   ADMIN LOGIN ROUTE
+# ============================================
+@admin_bp.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        if username == ADMIN_USER["username"] and check_password_hash(ADMIN_USER["password"], password):
+            session["admin_logged_in"] = True
+            return redirect(url_for("admin_bp.index"))
+        else:
+            flash("Invalid credentials", "danger")
+    
+    return render_template("login.html")
+
+# ============================================
+# admin logout route
+# ============================================
+@admin_bp.route("/logout")
+def logout():
+    session.pop("admin_logged_in", None)
+    return redirect(url_for("admin_bp.login"))
+
 
 
 
@@ -24,6 +62,9 @@ def index():
 # ============================================
 @admin_bp.route("/drivers")
 def drivers():
+    if not session.get("admin_logged_in"):
+     return redirect(url_for("admin_bp.login"))
+
     all_drivers = Driver.query.order_by(Driver.id.desc()).all()
     return render_template("drivers.html", drivers=all_drivers)
 
@@ -34,6 +75,9 @@ def drivers():
 # ============================================
 @admin_bp.route("/drivers/add", methods=["POST"])
 def add_driver():
+    if not session.get("admin_logged_in"):
+     return redirect(url_for("admin_bp.login"))
+
     name = request.form.get("name")
     phone = request.form.get("phone")
 

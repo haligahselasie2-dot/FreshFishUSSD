@@ -6,6 +6,7 @@ from admin.routes import admin_bp
 
 def create_app():
     app = Flask(__name__)
+    app.secret_key = "supersecretkey"
     app.config.from_object(Config)
     db.init_app(app)
 
