@@ -22,8 +22,9 @@ def index():
     orders = Order.query.order_by(Order.created_at.desc()).all()
     drivers = Driver.query.order_by(Driver.id.desc()).all()  # ✅ pass drivers list
     return render_template("admin.html", customers=customers, orders=orders, drivers=drivers)
-
-# Dummy admin credentials
+# ============================================
+#    ADMIN CREDENTIALS
+# ============================================
 ADMIN_USER = {
     "username": "admin",
     "password": generate_password_hash("password123")  # hashed password
@@ -37,7 +38,9 @@ def login():
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
-
+#===========================
+# check credentials
+#===========================
         if username == ADMIN_USER["username"] and check_password_hash(ADMIN_USER["password"], password):
             session["admin_logged_in"] = True
             return redirect(url_for("admin_bp.index"))
