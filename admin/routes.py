@@ -9,16 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 admin_bp = Blueprint('admin_bp', __name__, template_folder='templates')
 
-# ==================================================
-#   /admin (root) → ALWAYS require login
-# ==================================================
-@admin_bp.route("/")
-def admin_home():
-    if not session.get("admin_logged_in"):
-        return redirect(url_for("admin_bp.login"))
 
-    return redirect(url_for("admin_bp.dashboard"))
-    
 # ============================================
 #   ADMIN DASHBOARD (Customers + Orders)
 # ============================================
