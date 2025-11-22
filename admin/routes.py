@@ -7,8 +7,15 @@ from flask import session
 from werkzeug.security import check_password_hash, generate_password_hash
 
 
-admin_bp = Blueprint('admin_bp', __name__, template_folder='templates')
-  
+admin_bp = Blueprint(
+    'admin_bp',
+    __name__,
+    template_folder='templates',
+    static_folder='static',         # tells Flask where to look for static files
+    static_url_path='/admin/static' # URL path to access these static files
+)
+
+
 # ============================================
 #   ADMIN DASHBOARD (Customers + Orders)
 # ============================================
