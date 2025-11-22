@@ -13,6 +13,11 @@ def create_app():
     app.register_blueprint(ussd_bp, url_prefix="/ussd_api")
     app.register_blueprint(admin_bp, url_prefix="/admin")
 
+   # root route
+    @app.route("/")
+    def index():
+        return "TechHarvest system is live!"
+
     # ensure DB created
     with app.app_context():
         db.create_all()
@@ -25,7 +30,3 @@ if __name__ == "__main__":
     app = create_app()
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
-@app.route("/")
-def index():
-    return "TechHarvest system is live!"
